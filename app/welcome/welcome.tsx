@@ -12,7 +12,7 @@ export function Welcome() {
   );
 
   return (
-    <main className="pt-16 pb-4">
+    <main>
 
       {/* hero section */}
       <section id="hero" className="py-16 md:py-24 bg-white">
@@ -141,7 +141,7 @@ export function Welcome() {
         </div>
       </section>
 
-      
+
     </main>
   );
 }
