@@ -125,6 +125,23 @@ export function Welcome() {
           </div>
         </div>
       </section>
+
+      {/* above footer call to action */}
+      <section id="final-cta" className="py-16 bg-secondary">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h2 className="text-3xl md:text-4xl font-extrabold text-white mb-4">
+            Ready to Run Smarter, Not Harder?
+          </h2>
+          <p className="text-xl text-white/90 mb-8">
+            Generate your personalized, injury-proof running plan in minutes and sync it directly to your digital calendar.
+          </p>
+          <a href="#tool" className="cta-button inline-flex items-center justify-center px-12 py-5 border border-transparent text-xl font-bold rounded-full text-secondary bg-white hover:bg-gray-100 focus:outline-none focus:ring-4 focus:ring-white focus:ring-opacity-50 transition duration-300">
+            GET MY FREE WEEKLY PLAN
+          </a>
+        </div>
+      </section>
+
+      
     </main>
   );
 }
