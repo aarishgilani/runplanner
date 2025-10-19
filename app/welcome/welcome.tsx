@@ -77,44 +77,54 @@ export function Welcome() {
         </div>
       </section>
 
-      {/* <div className="flex-1 flex flex-col items-center gap-16 min-h-0">
-        <header className="flex flex-col items-center gap-9">
-          <div className="w-[500px] max-w-[100vw] p-4">
-            <img
-              src={logoLight}
-              alt="React Router"
-              className="block w-full dark:hidden"
-            />
-            <img
-              src={logoDark}
-              alt="React Router"
-              className="hidden w-full dark:block"
-            />
-          </div>
-        </header>
-        <div className="max-w-[300px] w-full space-y-6 px-4">
-          <nav className="rounded-3xl border border-gray-200 p-6 dark:border-gray-700 space-y-4">
-            <p className="leading-6 text-gray-700 dark:text-gray-200 text-center">
-              What&apos;s next?
+
+      {/* authority section */}
+      <section id="authority" className="py-16 md:py-24">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+
+          {/* Algorithm Explanation */}
+          <div className="lg:order-1">
+            <span className="text-sm font-semibold text-secondary uppercase tracking-wider">How We Plan</span>
+            <h2 className="text-3xl font-bold text-primary mt-1 mb-6">The Engine Behind Your Success</h2>
+            <p className="text-gray-600 mb-6">
+              Our proprietary algorithm, **The Sustainable Performance Model (SPM)**, dynamically adjusts your weekly load based on three core inputs: your current fitness level, your goal, and your reported fatigue.
             </p>
-            <ul>
-              {resources.map(({ href, text, icon }) => (
-                <li key={href}>
-                  <a
-                    className="group flex items-center gap-3 self-stretch p-3 leading-normal text-blue-700 hover:underline dark:text-blue-500"
-                    href={href}
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    {icon}
-                    {text}
-                  </a>
-                </li>
-              ))}
+
+            <ul className="space-y-5 text-gray-700">
+              <li className="flex items-start space-x-3">
+                <svg className="flex-shrink-0 w-6 h-6 text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.007 12.007 0 002.944 12c.007 3.238 1.487 5.925 3.528 7.373a11.97 11.97 0 01.76-1.554 12.003 12.003 0 01-1.226-6.819c-.067-1.12.28-2.222.955-3.195z" /></svg>
+                <p><strong>Calculated Progression:</strong> Volume is managed week-to-week using principles derived from the **Acute-to-Chronic Workload Ratio (ACWR)** to avoid sudden spikes in stress.</p>
+              </li>
+              <li className="flex items-start space-x-3">
+                <svg className="flex-shrink-0 w-6 h-6 text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.007 12.007 0 002.944 12c.007 3.238 1.487 5.925 3.528 7.373a11.97 11.97 0 01.76-1.554 12.003 12.003 0 01-1.226-6.819c-.067-1.12.28-2.222.955-3.195z" /></svg>
+                <p><strong>Mandatory Rest:</strong> Automatically incorporates scheduled rest weeks and recovery days, recognizing that fitness is built during **rest**, not just work.</p>
+              </li>
+              <li className="flex items-start space-x-3">
+                <svg className="flex-shrink-0 w-6 h-6 text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.007 12.007 0 002.944 12c.007 3.238 1.487 5.925 3.528 7.373a11.97 11.97 0 01.76-1.554 12.003 12.003 0 01-1.226-6.819c-.067-1.12.28-2.222.955-3.195z" /></svg>
+                <p><strong>Individualized Load:</strong> Moves beyond generic plans by recommending specific paces and efforts based on proven physiological markers.</p>
+              </li>
             </ul>
-          </nav>
+          </div>
+
+          {/* Citation/Proof Panel */}
+          <div className="lg:order-2 p-8 bg-white border border-gray-200 rounded-xl shadow-xl">
+            <span className="text-sm font-semibold text-accent uppercase tracking-wider">Research Focus</span>
+            <h3 className="text-2xl font-bold text-primary mt-1 mb-4">Our Commitment to Evidence</h3>
+            <p className="text-gray-600 mb-6 border-l-4 border-secondary pl-3 italic">
+              All plans are generated with direct reference to clinical and sports science journals to ensure best practices in training load management.
+            </p>
+            <div className="space-y-4 text-sm text-gray-700">
+              <p className="font-medium">Key Research Pillars:</p>
+              <ul className="list-disc list-inside space-y-2 pl-4">
+                <li>Gabbett, T. J. (2016). *The training—injury prevention paradox: should athletes be training smarter and harder?*</li>
+                <li>Impellizzeri, F. M. (2020). *ACWR and the risk of injuries: an important controversy.*</li>
+                <li>Foster, C. (1998). *Monitoring training in athletes with reference to overtraining syndrome.*</li>
+              </ul>
+              <a href="#" className="text-sm text-secondary hover:underline font-semibold block mt-4">View Full Research Citations (Coming Soon) →</a>
+            </div>
+          </div>
         </div>
-      </div> */}
+      </section>
     </main>
   );
 }
