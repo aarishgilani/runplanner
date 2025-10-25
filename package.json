@@ -8,13 +8,17 @@
     "dev": "react-router dev",
     "start": "react-router-serve ./build/server/index.js",
     "typecheck": "react-router typegen && tsc",
-    "deploy": "gh-pages -d build/client"
+    "deploy": "gh-pages -d build/client",
+    "test": "vitest",
+    "test:ui": "vitest --ui",
+    "test:run": "vitest run"
   },
   "dependencies": {
     "@react-router/node": "^7.9.2",
     "@react-router/serve": "^7.9.2",
     "gh-pages": "^6.3.0",
     "isbot": "^5.1.31",
+    "lucide-react": "^0.548.0",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
     "react-router": "^7.9.2"
@@ -25,9 +29,12 @@
     "@types/node": "^22",
     "@types/react": "^19.1.13",
     "@types/react-dom": "^19.1.9",
+    "@vitest/ui": "^4.0.3",
+    "jsdom": "^27.0.1",
     "tailwindcss": "^4.1.13",
     "typescript": "^5.9.2",
     "vite": "^7.1.7",
-    "vite-tsconfig-paths": "^5.1.4"
+    "vite-tsconfig-paths": "^5.1.4",
+    "vitest": "^4.0.3"
   }
 }
