@@ -42,9 +42,9 @@ class GenerateQuickPlan {
         const ratios: { [key: number]: number[] } = {
             1: [1.0],
             2: [0.6, 0.4],
-            3: [0.3, 0.3, 0.2],
-            4: [0.25, 0.21, 0.21, 0.333], 
-            5: [0.18, 0.18, 0.2, 0.22, 0.22]
+            3: [0.35, 0.35, 0.3],
+            4: [0.28, 0.24, 0.24, 0.24],
+            5: [0.2, 0.2, 0.2, 0.2, 0.2]
         };
         return ratios[numDays] || [];
     }
@@ -131,39 +131,86 @@ class GenerateQuickPlan {
     }
 
     generatePlan() {
-        // Zone 1 (low intensity): ≥ 60–75% of total volume
-        // Zone 2 (moderate/threshold intensity): 15–25%
-        // Zone 3 (high intensity): 5–10%
-        const intensityZones = [
-            { zone: 1, minPercent: 0.60, maxPercent: 0.75 },
-            { zone: 2, minPercent: 0.15, maxPercent: 0.25 },
-            { zone: 3, minPercent: 0.05, maxPercent: 0.10 },
-        ]
+        // Pyramidal Training: Apply 80/20 principle to weekly VOLUME, not days
+        // Zone 1 (easy intensity): 75-80% of total weekly volume
+        // Zone 2 (moderate intensity): 15-20% of total weekly volume  
+        // Zone 3 (high intensity): 5-10% of total weekly volume
 
         const newWeeklyMileage = this.calculateWeeklyMileage();
-        let currentLoad = 0; // cumulative mileage 
-        const runSplits = GenerateQuickPlan.RUN_TYPE_SPLITS(this.#readinessPercent); // run split based on readiness
-        const plan: { day: number; mileage: number; runType: string }[] = []; // final plan array
+        
+        // Calculate volume allocation per intensity zone
+        const zone1Volume = newWeeklyMileage * 0.80; // 80% easy volume
+        const zone2Volume = newWeeklyMileage * 0.15; // 15% moderate volume
+        const zone3Volume = newWeeklyMileage * 0.05; // 5% high intensity volume
+        
+        let remainingZone1 = zone1Volume;
+        let remainingZone2 = zone2Volume; 
+        let remainingZone3 = zone3Volume;
+        
+        const plan: { day: number; mileage: number; runType: string; intensityBreakdown?: { easy: number; moderate: number; hard: number } }[] = [];
 
         for (let i = 0; i < this.#numberOfDays; i++) {
             const dailyRatio = GenerateQuickPlan.DAILY_MILEAGE_RATIOS(this.#numberOfDays)[i];
+            const dailyMileage = newWeeklyMileage * dailyRatio;
             
-            // Find the appropriate run type based on daily ratio
-            let runType = 'Easy Run'; // default
-            const ratioThresholds = Object.keys(runSplits).map(key => parseFloat(key)).sort((a, b) => a - b);
+            // Distribute intensity zones within this day's mileage
+            let easyVolume = 0;
+            let moderateVolume = 0; 
+            let hardVolume = 0;
+            let runType = 'Easy Run';
             
-            for (const threshold of ratioThresholds) {
-                if (dailyRatio <= threshold) {
-                    runType = runSplits[threshold];
-                    break;
+            // Apply readiness adjustments
+            if (this.#readinessPercent < 50) {
+                // Low readiness: all easy running
+                easyVolume = dailyMileage;
+                runType = i === 0 ? 'Recovery Run' : 'Easy Run';
+            } else {
+                // Allocate intensity based on available volume and daily portion
+                
+                // First, allocate easy volume (always gets priority)
+                easyVolume = Math.min(remainingZone1, dailyMileage * 0.80);
+                remainingZone1 -= easyVolume;
+                
+                // Then allocate moderate intensity if there's remaining distance and volume
+                const remainingDailyDistance = dailyMileage - easyVolume;
+                if (remainingDailyDistance > 0 && remainingZone2 > 0 && this.#readinessPercent >= 70) {
+                    moderateVolume = Math.min(remainingZone2, remainingDailyDistance * 0.80);
+                    remainingZone2 -= moderateVolume;
+                }
+                
+                // Finally, allocate high intensity if there's still remaining distance
+                const stillRemainingDistance = dailyMileage - easyVolume - moderateVolume;
+                if (stillRemainingDistance > 0 && remainingZone3 > 0 && this.#readinessPercent >= 85) {
+                    hardVolume = Math.min(remainingZone3, stillRemainingDistance);
+                    remainingZone3 -= hardVolume;
+                }
+                
+                // If there's still unallocated distance, make it easy
+                const unallocatedDistance = dailyMileage - easyVolume - moderateVolume - hardVolume;
+                if (unallocatedDistance > 0) {
+                    easyVolume += unallocatedDistance;
+                }
+                
+                // Determine run type based on composition
+                if (hardVolume > 0) {
+                    runType = 'Interval Run';
+                } else if (moderateVolume > 0) {
+                    runType = moderateVolume > easyVolume * 0.25 ? 'Tempo Run' : 'Progressive Run';
+                } else {
+                    runType = dailyMileage > newWeeklyMileage * 0.4 ? 'Long Easy Run' : 'Easy Run';
                 }
             }
 
-            const dailyMileage = newWeeklyMileage * dailyRatio;
-            
-            currentLoad += dailyMileage;
-
-            plan.push({ day: i + 1, mileage: parseFloat(dailyMileage.toFixed(2)), runType });
+            plan.push({ 
+                day: i + 1, 
+                mileage: parseFloat(dailyMileage.toFixed(2)), 
+                runType,
+                intensityBreakdown: {
+                    easy: parseFloat(easyVolume.toFixed(2)),
+                    moderate: parseFloat(moderateVolume.toFixed(2)), 
+                    hard: parseFloat(hardVolume.toFixed(2))
+                }
+            });
         }
 
         return plan;
